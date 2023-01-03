@@ -1,0 +1,322 @@
+<!-- #TODO : Validatation part is remaining -->
+<!-- #FIXME: Try to validate the form without reloading the form -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LoginForm</title>
+
+    <style>
+
+      *{
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        display: flex;
+        height: 810px;
+        width: 800px;
+        border: 1px solid black;
+        margin: auto;
+        margin-top: 50px;
+        box-shadow: 5px 15px 100px rgb(92, 92, 92);
+        color: #005cae;
+      }
+
+
+      .form {
+        color: #005cae;
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        align-items: center;
+        background: whitesmoke;
+      }
+
+      .form h2 {
+        font-size: 60px;
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 40px;
+      }
+
+      .box {
+        padding: 12px;
+        width: 65%;
+        margin: 15px;
+        border: 1px solid black;
+        outline: none;
+        border-radius: 8px;
+      }
+
+      #submit {
+        padding: 12px 30px;
+        font-size: 16px;
+        width: 40%;
+        background: #005cae;
+        margin-top: 40px;
+        color: white;
+        font-weight: bold;
+        border: none;
+        outline: none;
+        padding: 13px;
+        border-radius: 20px;
+      }
+
+      .side{
+        /* overflow: auto; */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        background: #005AE6;
+      }
+
+      .help{
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 15px;
+        margin-top: 20px;
+        color: #005cae;
+      }
+
+      .error{
+        font-size: 15px;
+        padding: 0px;
+        height: -10px;
+        margin: 0;
+        color: red;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      
+      .BG{
+        display: flex;
+        margin: 0;
+        padding: 0;
+        height: 140vh;
+        background: url('img/bg.gif');
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <div class="BG">
+
+          <div class="container">
+          <div class="side">
+            <img src="img/HERO.png" alt="">
+          </div>    
+
+
+      <form class="form" onsubmit="return validateForm()">
+        <h2 style="margin-top: 50px; line-height:54px;"><i style="font-weight: 900; font-size: 80px;">FLASH</i> <br>Security <sup>++</sup></h2>
+        <p style="display:flex; font-size:18px; margin-top: -20px; font-family: Arial, Helvetica, sans-serif; font-weight: 400; color: #448cff;">Securing today for better tommorow</p>
+        <input 
+          type="text"
+          name="name"
+          class="box" 
+          id="username"
+          placeholder="Enter username"
+        />
+        <p class="error" id="userError"></p>
+
+        <input 
+        type="text" 
+        name="phone" 
+        class="box"
+        id = "phone"
+        placeholder="phone number"
+        id="">
+        <p class="error" id="phoneError"></p>
+
+        <input
+          type="email"
+          name="email"
+          class="box"
+          id="email"
+          placeholder="Enter the email"
+        />
+        <p class="error" id="emailError"></p>
+
+        <input
+          type="password"
+          name="password"
+          class="box"
+          id="pass-1"
+          placeholder="enter password"
+        />
+        <p class="error" id="passError1"></p>
+
+          <input
+          type="password"
+          name="password"
+          id="pass-2"
+          class="box"
+          placeholder="confirm password"
+        />
+        <p class="error" id="passError2"></p>
+
+        <input type="submit" value="SignIn" id="submit" />
+        <a class="help" href="#">Forgot Password</a>
+        
+      </form>
+
+
+    </div>
+
+
+
+ 
+    </div>
+
+
+    <!-- Write the javascript code here under the script tag  -->
+
+    <script type="text/javascript"> 
+
+      // Utility Function :
+      function checkEmail(email)
+      {
+        isContainCapital = false;
+        isContainSymbol = false;
+
+        for(let j=0; j<email.length; j++)
+        {
+          if(email[j] == '@')
+          {
+              isContainSymbol = true;
+          }
+
+          if(email[j] == email[j].toUpperCase())
+          {
+            isContainCapital = true;
+          }
+
+          if(isContainSymbol || isContainCapital)
+          {
+            return true;
+          }
+
+          return false;
+
+        }        
+        
+
+
+      }
+
+
+      // Validation starts here 
+      let isValidate = false;
+
+
+      // Grabbing up the data from the html objects
+      let userName = document.getElementById('username');
+      let phone = document.getElementById('phone');
+      let email = document.getElementById('email');
+      let pass_1 = document.getElementById('pass-1');
+      let pass_2 = document.getElementById('pass-2');
+
+
+      // Error Strings 
+      let EMPTY_STRING = ""; // Mostyle used to showcase the error has been resolved 
+      let UserEmptyError = "username can not be blank";
+      let UserLenError = "username must be longer than 6 chars";
+      let PhoneEmptyError = "phone number field is empty";
+      let PhoneLenError = "phone number length is invalid";
+      let EmailError = "entered invalid email";
+      let EmailEmptyError = "email section is empty";
+      let PassWordError = "password length is invalid";
+      let PassWordEmpty = "password set is empty";
+      let PassMisMatch = "password mismatch";
+
+
+      function validateForm()
+      {
+
+        // Resolving the validation Error-1 
+          if(userName.value == "")
+          {
+            isValidate = false;
+            document.getElementById('userError').innerHTML = UserEmptyError;
+          }else if((userName.value).length < 4)
+          {
+            isValidate = false;
+            document.getElementById('userError').innerHTML  = UserLenError;
+          }else{
+            isValidate = true;
+            document.getElementById('userError').innerHTML = "";
+          }
+
+
+          // Resolving the validation Error-2 
+          if((phone.value).length == 0)
+          {
+              isValidate = false;
+              document.getElementById('phoneError').innerHTML = PhoneEmptyError;
+          }else if((phone.value).length < 10 || (phone.value).length > 10)
+          {
+            isValidate = false;
+            document.getElementById('phoneError').innerHTML = PhoneLenError;
+          }else{
+            isValidate = true;
+            document.getElementById('phoneError').innerHTML = EMPTY_STRING;
+          }
+
+          // Resolving the Validation Error-3
+          if(email.value == "")
+          {
+            document.getElementById('emailError').innerHTML = EmailEmptyError;
+            isValidate = false;
+          }
+          else{
+            document.getElementById('emailError').innerHTML = EMPTY_STRING;
+            isValidate = true;
+          }
+
+          // Resolving the Validation Error-4 
+          if((pass_1.value).length < 3)
+          {
+            document.getElementById('passError1').innerHTML = PassWordError;
+            isValidate = false;
+          }else if((pass_1.value).length == 0)
+          {
+            document.getElementById('passError1').innerHTML = PassWordEmpty;
+            isValidate = false;
+          }else{
+            document.getElementById('passError1').innerHTML = EMPTY_STRING;
+            isValidate = true;
+          }
+
+
+          if((pass_1.value) != (pass_2.value) || (((pass_1.value).length == 0) || (pass_2.value).length ==0))
+          {
+            document.getElementById('passError2').innerHTML = PassMisMatch;
+            isValidate = false;
+          }else{
+            document.getElementById('passError2').innerHTML = EMPTY_STRING;
+            isValidate = true;
+          }
+
+
+          
+          
+          if(isValidate)
+          {
+            return true;
+          }else{
+            return false;
+          }
+          
+      }
+      
+     
+
+    </script>
+
+
+    
+  </body>
+</html>
